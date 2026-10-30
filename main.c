@@ -4,35 +4,7 @@
  *基础机器算法: MAXMIN算法 评估函数 节点生成
  *进阶机器算法: alpha-beta剪枝 节点排序算法
  */
-
-#include <stdio.h>
-#include <stdlib.h>
-#include "game_administrator.c"
-#include "interface.c"
-
-int check_game_over(int board[15][15], int step);  // 返回值: 0 未结束, 1 黑胜, 2 白胜, 3 和局
-
-int evaluate(int board[15][15]);  // 评估函数: 正数黑棋优势, 负数白棋优势, 绝对值越大优势越大
-
-int find_node(int board[15][15]);  // 节点生成函数, 寻找可以落子的位置
-
-int * search(int board[15][15], int step);  // 搜索算法, 返回包含x, y坐标的数组
-
-void print_board(int board[15][15]);  // 打印棋盘
-
-// 临时测试
-int * search(int board[15][15], int step) {
-    int * result = (int *)malloc(sizeof(int) * 2);
-    for (int i = 0; i < 15; i++) {
-        for (int j = 0; j < 15; j++) {
-            if (board[i][j] == 0) {
-                result[0] = i;
-                result[1] = j;
-                return result;
-            }
-        }
-    }
-}
+#include "main.h"
 
 int main(void) {
 

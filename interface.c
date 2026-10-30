@@ -1,9 +1,10 @@
-#include <stdio.h>
+#include "main.h"
 /*
  * 黑棋 ●
  * 白棋 ○
  * 空地 ·
  */
+#include "main.h"
 
 void print_board(int board[15][15]) {
 
@@ -27,4 +28,5 @@ void print_board(int board[15][15]) {
         }
         printf("\n");
     }
+    printf("The score of current situation: %d.\n", evaluate(board));
 }
