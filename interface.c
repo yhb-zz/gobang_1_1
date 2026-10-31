@@ -5,6 +5,7 @@
  * 空地 ·
  */
 #include "main.h"
+#include "machine/node_generation.c"  // 测试
 
 void print_board(int board[15][15]) {
 
@@ -29,4 +30,16 @@ void print_board(int board[15][15]) {
         printf("\n");
     }
     printf("The score of current situation: %d.\n", evaluate(board));
+
+    struct Node *head = node_generation(board);
+    struct Node *node_ptr = head;
+    printf("(Debug)可以落子的位置有:");
+    while (node_ptr != NULL) {
+        printf("(%d, %d) ", node_ptr->x + 1, node_ptr->y + 1);
+        node_ptr = node_ptr->next;
+    }
+    printf("\n");
+
+    free_linked_list(head);
+
 }

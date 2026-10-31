@@ -10,7 +10,7 @@ int evaluate(int board[15][15]);  // 评估函数: 正数黑棋优势, 负数白
 
 int find_node(int board[15][15]);  // 节点生成函数, 寻找可以落子的位置
 
-int * search(int board[15][15], int step);  // 搜索算法, 返回包含x, y坐标的数组
+int * machine(int board[15][15], int step);  // 搜索算法, 返回包含x, y坐标的数组
 
 void print_board(int board[15][15]);  // 打印棋盘
 
@@ -19,4 +19,4 @@ void print_board(int board[15][15]);  // 打印棋盘
 #include "machine/search.c"
 #include "machine/evaluate.c"
 
-#endif
+#endif // MAIN_H

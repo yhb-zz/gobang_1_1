@@ -47,7 +47,7 @@ int main(void) {
             y = user_y - 1;
         } else {
             printf("Machine thinking...\n");
-            machine_place = search(board, step);
+            machine_place = machine(board, step);
             x = machine_place[0];
             y = machine_place[1];
             free(machine_place);
