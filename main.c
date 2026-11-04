@@ -4,7 +4,11 @@
  *基础机器算法: MAXMIN算法 评估函数 节点生成
  *进阶机器算法: alpha-beta剪枝 节点排序算法
  */
-#include "main.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "game_administrator.h"
+#include "interface.h"
+#include "machine/search.h"
 
 int main(void) {
 
@@ -47,7 +51,7 @@ int main(void) {
             y = user_y - 1;
         } else {
             printf("Machine thinking...\n");
-            machine_place = machine(board, step);
+            machine_place = machine(board, player == 1 ? 2 : 1, step);
             x = machine_place[0];
             y = machine_place[1];
             free(machine_place);

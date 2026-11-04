@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
-struct Node {
-    int x, y;
-    struct Node *next;
-};
+#include "linked_list.h"
 
 // 链表节点生成: last 可以为 NULL, 也可以为任意节点. 会在链表后面新增节点, 并返回该节点
 struct Node *new_node(int x, int y, struct Node * last) {
@@ -47,4 +43,64 @@ void free_linked_list(struct Node *head) {
         node_ptr1 = node_ptr2;
     }
     free(node_ptr1);
+}
+
+int score_find(struct Node * head, _Bool is_max) {
+    if (head == NULL) {
+        perror("head == NULL");
+    }
+    struct Node * node_ptr = head;
+    int max = node_ptr->score;
+    int min = node_ptr->score;
+
+    while (node_ptr != NULL) {
+        if (is_max) {
+            if (node_ptr->score > max) {
+                max = node_ptr->score;
+            }
+        } else {
+            if (node_ptr->score < min) {
+                min = node_ptr->score;
+            }
+        }
+        node_ptr = node_ptr->next;
+    }
+
+    return is_max ? max : min;
+}
+
+int * pos_find(struct Node * head, _Bool is_max) {
+    if (head == NULL) {
+        perror("head == NULL");
+    }
+    struct Node * node_ptr = head;
+    int max = node_ptr->score;
+    int min = node_ptr->score;
+    int x = node_ptr->x;
+    int y = node_ptr->y;
+
+    while (node_ptr != NULL) {
+        if (is_max) {
+            if (node_ptr->score > max) {
+                max = node_ptr->score;
+                x = node_ptr->x;
+                y = node_ptr->y;
+            }
+        } else {
+            if (node_ptr->score < min) {
+                min = node_ptr->score;
+                x = node_ptr->x;
+                y = node_ptr->y;
+            }
+        }
+        node_ptr = node_ptr->next;
+    }
+
+    int * result = malloc(sizeof(int) * 2);
+    if (result == NULL) {
+        perror("malloc error");
+    }
+    result[0] = x;
+    result[1] = y;
+    return result;
 }

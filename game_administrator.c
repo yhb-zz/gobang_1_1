@@ -1,3 +1,4 @@
+#include "game_administrator.h"
 
 // 返回值: 0 未结束, 1 黑胜, 2 白胜, 3 和局
 int check_game_over(int board[15][15], int step) {

@@ -1,8 +1,10 @@
-#include "machine.h"
+#include <stdio.h>
+#include "node_generation.h"
+#include "linked_list.h"
 
-static const int surround[8][2] = {{1, 1}, {1, 0}, {1, -1}, {0, 1},\
+const int surround[8][2] = {{1, 1}, {1, 0}, {1, -1}, {0, 1},\
 {0, -1}, {-1, 1}, {-1, 0}, {-1, -1}};
-static const int extend[8][2] = {{2, 2}, {2, 0}, {2, -2}, {0, 2},\
+const int extend[8][2] = {{2, 2}, {2, 0}, {2, -2}, {0, 2},\
                            {0, -2}, {-2, 2}, {-2, 0}, {-2, -2}};
 
 // 搜寻可供落子的位置

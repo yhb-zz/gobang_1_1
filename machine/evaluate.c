@@ -7,7 +7,7 @@
  * 活二/冲三: 10
  * 活一/冲二: 1
  */
-#include "../main.h"
+#include "evaluate.h"
 
 int settle(int color, int length, int block) {
     // printf("(Debug)结算结果(color: %d, length: %d, block: %d).\n", color, length, block);
