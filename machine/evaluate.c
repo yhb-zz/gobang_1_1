@@ -1,7 +1,7 @@
 /*
  * 评估函数: 评估当前局面, 对黑棋有利的棋型为正, 对白棋有利的棋型为负
  * (以下为绝对值)
- * 连五: 10000
+ * 连五: 10000~20000
  * 活四: 1000
  * 活三/冲四: 100
  * 活二/冲三: 10
@@ -10,10 +10,15 @@
 #include "evaluate.h"
 
 int settle(int color, int length, int block) {
-    // printf("(Debug)结算结果(color: %d, length: %d, block: %d).\n", color, length, block);
 
     if (length >= 5) {
-        return color == 1 ? 10000 : -10000;
+        if (block == 2) {
+            return color == 1 ? 10000 : -10000;
+        } else if (block == 1) {
+            return color == 1 ? 15000 : -15000;
+        } else if (block == 0) {
+            return color == 1 ? 20000 : -20000;
+        }
     }
     switch (block) {
         case 1:
@@ -55,7 +60,6 @@ int settle(int color, int length, int block) {
 }
 
 void judge(_Bool is_edge,int new_color, int * color, int * length, int * block, int * score) {
-    int debug;
 
     switch (*color) {
         case 0:
@@ -77,9 +81,7 @@ void judge(_Bool is_edge,int new_color, int * color, int * length, int * block, 
         case 1:
             switch (new_color) {
                 case 0:
-                    debug = settle(*color, *length, *block);
-                    // printf("(Debug)得分为: %d.\n", debug);
-                    *score += debug;
+                    *score += settle(*color, *length, *block);
                     *color = 0;
                     *length = 0;
                     *block = 0;
@@ -89,9 +91,7 @@ void judge(_Bool is_edge,int new_color, int * color, int * length, int * block, 
                     break;
                 case 2:
                     (*block)++;
-                    debug = settle(*color, *length, *block);
-                    // printf("(Debug)得分为: %d.\n", debug);
-                    *score += debug;
+                    *score += settle(*color, *length, *block);
                     *color = 2;
                     *length = 1;
                     *block = 1;
@@ -101,18 +101,14 @@ void judge(_Bool is_edge,int new_color, int * color, int * length, int * block, 
         case 2:
             switch (new_color) {
                 case 0:
-                    debug = settle(*color, *length, *block);
-                    // printf("(Debug)得分为: %d.\n", debug);
-                    *score += debug;
+                    *score += settle(*color, *length, *block);
                     *color = 0;
                     *length = 0;
                     *block = 0;
                     break;
                 case 1:
                     (*block)++;
-                    debug = settle(*color, *length, *block);
-                    // printf("(Debug)得分为: %d.\n", debug);
-                    *score += debug;
+                    *score += settle(*color, *length, *block);;
                     *color = 1;
                     *length = 1;
                     *block = 1;
@@ -135,8 +131,6 @@ int evaluate(int board[15][15]) {
 
     for (i = 0; i < 15; i++) {
         for (j = 0; j < 15; j++) {
-            // printf("(Debug)[%d,%d]color:%d,new_color:%d,length:%d,block:%d,score:%d.\n", \
-                i=1, j+1, color, board[i][j], length, block, score);
             judge(j == 0, board[i][j], &color, &length, &block, &score);
         }
         if (color) {
@@ -163,8 +157,6 @@ int evaluate(int board[15][15]) {
 
     for (i = 0; i < 11; i++) {
         for (j = 0; j < 15-i; j++) {
-            // printf("(Debug)[%d,%d]color:%d,new_color:%d,length:%d,block:%d,score:%d.\n", \
-                i+j+1, j+1, color, board[i+j][j], length, block, score);
             judge(j == 0, board[i+j][j], &color, &length, &block, &score);
         }
         if (color) {
@@ -178,8 +170,6 @@ int evaluate(int board[15][15]) {
 
     for (j = 1; j < 11; j++) {
         for (i = 0; i < 15-j; i++) {
-            // printf("(Debug)[%d,%d]color:%d,new_color:%d,length:%d,block:%d,score:%d.\n", \
-                i+1, i+j+1, color, board[i][i+j], length, block, score);
             judge(i == 0, board[i][i+j], &color, &length, &block, &score);
         }
         if (color) {
@@ -193,14 +183,11 @@ int evaluate(int board[15][15]) {
 
     for (i = 4; i < 15; i++) {
         for (j = 0; j < i+1; j++) {
-            // printf("(Debug)[%d,%d]color:%d,new_color:%d,length:%d,block:%d,score:%d.\n", \
-                i-j+1, j+1, color, board[i-j][j], length, block, score);
             judge(j == 0, board[i-j][j], &color, &length, &block, &score);
         }
         if (color) {
             block++;
             debug = settle(color, length, block);
-            // printf("(Debug)得分为: %d.\n", debug);
             score += debug;
         }
         color = 0;
@@ -210,14 +197,11 @@ int evaluate(int board[15][15]) {
 
     for (j = 1; j < 11; j++) {
         for (i = 0; i < 15-j; i++) {
-            // printf("(Debug)[%d,%d]color:%d,new_color:%d,length:%d,block:%d,score:%d.\n", \
-                14-i+1, i+j+1, color, board[14-i][i+j], length, block, score);
             judge(i == 0, board[14-i][i+j], &color, &length, &block, &score);
         }
         if (color) {
             block++;
             debug = settle(color, length, block);
-            // printf("(Debug)得分为: %d.\n", debug);
             score += debug;
         }
         color = 0;

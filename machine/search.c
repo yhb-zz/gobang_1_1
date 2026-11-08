@@ -6,7 +6,7 @@
 #include "evaluate.h"
 #include "../game_administrator.h"
 
-int search(int board[15][15], int depth, int color, int step);
+int search(int board[15][15], int depth, int color, int step, int alpha_or_beta, _Bool is_first_node);
 
 int * machine(int board[15][15], int color, int step) {
     if (step == 0) {
@@ -22,16 +22,31 @@ int * machine(int board[15][15], int color, int step) {
         perror("node_ptr == NULL");
     }
 
+    int max = 0, min = 0;
+    _Bool is_first_loop = 1;
     while (node_ptr != NULL) {
         board[node_ptr->x][node_ptr->y] = color;
-        node_ptr->score = search(board, 1, color == 1 ? 2 : 1, step + 1);
+        node_ptr->score = search(board, 1, color == 1 ? 2 : 1, step + 1,\
+            color == 1 ? max : min, is_first_loop);
         board[node_ptr->x][node_ptr->y] = 0;
+
+        if (is_first_loop) {
+            max = node_ptr->score;
+            min = node_ptr->score;
+            is_first_loop = 0;
+        } else {
+            if (color == 1) {
+                max = node_ptr->score > max ? node_ptr->score : max;
+            } else {
+                min = node_ptr->score < min ? node_ptr->score : min;
+            }
+        }
         node_ptr = node_ptr->next;
     }
     return pos_find(head, color == 1);
 }
 
-int search(int board[15][15], int depth, int color, int step) {
+int search(int board[15][15], int depth, int color, int step, int alpha_or_beta, _Bool is_first_node) {
     int game_over = check_game_over(board, step);
     if (game_over) {
         return evaluate(board);
@@ -46,33 +61,40 @@ int search(int board[15][15], int depth, int color, int step) {
         perror("node_ptr == NULL");
     }
 
+    int max = 0, min = 0;
+    _Bool is_first_loop = 1;
     while (node_ptr != NULL) {
         board[node_ptr->x][node_ptr->y] = color;
-        node_ptr->score = search(board, depth + 1, color == 1 ? 2 : 1, step + 1);
+        node_ptr->score = search(board, depth + 1, color == 1 ? 2 : 1, step + 1,\
+            color == 1 ? max : min, is_first_loop);
         board[node_ptr->x][node_ptr->y] = 0;
-        node_ptr = node_ptr->next;
-    }
-    int score = score_find(head, color == 1);
-    free_linked_list(head);
-    return score;
-}
 
-
-/*
-// 临时测试
-int * machine(int board[15][15], int step) {
-    int * result = malloc(sizeof(int) * 2);
-    if (result == NULL) {
-        perror("machine/search.c: malloc error");
-    }
-    for (int i = 0; i < 15; i++) {
-        for (int j = 0; j < 15; j++) {
-            if (board[i][j] == 0) {
-                result[0] = i;
-                result[1] = j;
-                return result;
+        if (!is_first_node) {
+            if (color == 1 && node_ptr->score > alpha_or_beta) {
+                int final_score = node_ptr->score;
+                free_linked_list(head);
+                return final_score;
+            }
+            if (color == 2 && node_ptr->score < alpha_or_beta) {
+                int final_score = node_ptr->score;
+                free_linked_list(head);
+                return final_score;
             }
         }
+
+        if (is_first_loop) {
+            max = node_ptr->score;
+            min = node_ptr->score;
+            is_first_loop = 0;
+        } else {
+            if (color == 1) {
+                max = node_ptr->score > max ? node_ptr->score : max;
+            } else {
+                min = node_ptr->score < min ? node_ptr->score : min;
+            }
+        }
+        node_ptr = node_ptr->next;
     }
+    free_linked_list(head);
+    return color == 1 ? max : min;
 }
-*/
