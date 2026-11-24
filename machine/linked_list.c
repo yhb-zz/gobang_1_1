@@ -49,7 +49,6 @@ void free_linked_list(struct Node *head) {
     free(node_ptr1);
 }
 
-// 测试数据 10 7 5 20 10 15 20
 // 按照 pre_score 由大到小的顺序插入, 如果 head 为 NULL 则创建新链表, 返回值为链表的 head
 struct Node * sort_insert(struct Node *head, int x, int y, int pre_score) {
     if (head == NULL) {

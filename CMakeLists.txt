@@ -11,4 +11,5 @@ add_executable(gobang_1_1
         machine/linked_list.c
         machine/node_generation.c
         machine/search.c
+        machine/tools.c
 )

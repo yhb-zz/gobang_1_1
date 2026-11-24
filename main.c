@@ -10,6 +10,9 @@
 #include "interface.h"
 #include "machine/search.h"
 
+extern int table[31][31];
+int table[31][31];
+
 int main(void) {
 
     // 获取先后手信息
@@ -25,6 +28,10 @@ int main(void) {
             board[i][j] = 0;
         }
     }
+    FILE *fp = fopen("machine/table.dat", "rb");
+    int (*table)[31] = malloc(sizeof(int) * 31 * 31);
+    fread(table, sizeof(int) * 31, 31, fp);
+    fclose(fp);
 
     // 游戏运行
     int x = 0;
